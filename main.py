@@ -70,6 +70,10 @@ if __name__ == '__main__':
                         help='plot the results')
     parser.add_argument("-runAll", "--runAll", action='store_true',
                         help='run all three algos')
+    parser.add_argument("-runAll_e", "--runAll_e", action='store_true',
+                        help='run all e')
+    parser.add_argument("-runAll_c", "--runAll_c", action='store_true',
+                        help='run all c')
     args = parser.parse_args()
 
     # start training
@@ -88,4 +92,24 @@ if __name__ == '__main__':
         for algo in _all:
             idx = _all.index(algo)
             avg_reward[idx] = train(args, Gaussian_MAB, FUNCTION_MAP[algo])
+        plot(avg_reward, _all)
+
+    if args.runAll_e:
+        _all = [0, 0.01, 0.1, 0.5, 0.99]
+        avg_reward = np.zeros([len(_all), args.max_timestep])
+        for n in _all:
+            args.epislon = n
+            idx = _all.index(n)
+            avg_reward[idx] = train(args, Gaussian_MAB, FUNCTION_MAP['e-Greedy'])
+            # avg_reward[idx] = train(args, Gaussian_MAB, FUNCTION_MAP[algo])
+        plot(avg_reward, _all)
+
+    if args.runAll_c:
+        _all = [0.1, 0.5, 1, 5, 10, 30]
+        avg_reward = np.zeros([len(_all), args.max_timestep])
+        for n in _all:
+            args.c = n
+            idx = _all.index(n)
+            avg_reward[idx] = train(args, Gaussian_MAB, FUNCTION_MAP['UCB'])
+            # avg_reward[idx] = train(args, Gaussian_MAB, FUNCTION_MAP[algo])
         plot(avg_reward, _all)

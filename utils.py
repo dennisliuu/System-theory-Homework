@@ -35,4 +35,3 @@ def plot(avg_reward, label):
     ax1.grid('k', ls='--', alpha=0.3)
 
     plt.show()
-
